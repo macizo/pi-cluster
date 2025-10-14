@@ -13,37 +13,37 @@ spec:
         name: traefik
         namespace: flux-system
   values:
-  ingressClass:
-    enabled: true
-    isDefaultClass: true
-    name: traefik
+    ingressClass:
+      enabled: true
+      isDefaultClass: true
+      name: traefik
 
-  providers:
-    kubernetesIngress:
-      publishedService:
-        enabled: true
-      allowExternalNameServices: true
+    providers:
+      kubernetesIngress:
+        publishedService:
+          enabled: true
+        allowExternalNameServices: true
 
-  service:
-    ipFamilyPolicy: PreferDualStack
+    service:
+      ipFamilyPolicy: PreferDualStack
 
-  ports:
-    websecure:
-      tls:
-        enabled: true
+    ports:
+      websecure:
+        tls:
+          enabled: true
 
-  additionalArguments:
-    - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
-    - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+    additionalArguments:
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
 
-  deployment:
-    podAnnotations:
-      prometheus.io/scrape: "true"
-      prometheus.io/port: "8082"
+    deployment:
+      podAnnotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8082"
 
-  tolerations:
-    - key: "node-role.kubernetes.io/control-plane"
-      operator: "Exists"
-      effect: "NoSchedule"
-    - key: "CriticalAddonsOnly"
-      operator: "Exists"
+    tolerations:
+      - key: "node-role.kubernetes.io/control-plane"
+        operator: "Exists"
+        effect: "NoSchedule"
+      - key: "CriticalAddonsOnly"
+        operator: "Exists"
