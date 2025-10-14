@@ -12,6 +12,14 @@ spec:
         kind: HelmRepository
         name: traefik
         namespace: flux-system
+  install:
+    remediation:
+      retries: 3
+    timeout: 10m
+  upgrade:
+    remediation:
+      retries: 3
+    timeout: 10m
   values:
     ingressClass:
       enabled: true
@@ -22,7 +30,6 @@ spec:
       kubernetesIngress:
         publishedService:
           enabled: true
-        allowExternalNameServices: true
 
     service:
       ipFamilyPolicy: PreferDualStack
@@ -31,19 +38,3 @@ spec:
       websecure:
         tls:
           enabled: true
-
-    additionalArguments:
-      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
-      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
-
-    deployment:
-      podAnnotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/port: "8082"
-
-    tolerations:
-      - key: "node-role.kubernetes.io/control-plane"
-        operator: "Exists"
-        effect: "NoSchedule"
-      - key: "CriticalAddonsOnly"
-        operator: "Exists"
