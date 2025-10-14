@@ -8,28 +8,13 @@ spec:
   chart:
     spec:
       chart: traefik
-      version: 34.2.1        # pin a version you trust
+      version: 34.2.1
       sourceRef:
         kind: HelmRepository
         name: traefik
         namespace: flux-system
   values:
-    deployment:
-      podAnnotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/port: "8082"
-    providers:
-      kubernetesIngress:
-        publishedService:
-          enabled: true
-    service:
-      ipFamilyPolicy: PreferDualStack
-    tolerations:
-      - key: "node-role.kubernetes.io/control-plane"
-        operator: "Exists"
-        effect: "NoSchedule"
-      - key: "CriticalAddonsOnly"
-        operator: "Exists"
+    # Make Traefik the default IngressClass so apps in any namespace work
     ingressClass:
       enabled: true
       isDefaultClass: true
@@ -39,9 +24,12 @@ spec:
       kubernetesIngress:
         publishedService:
           enabled: true
+        # optional but handy on k3s
+        allowExternalNameServices: true
 
     service:
       ipFamilyPolicy: PreferDualStack
+      # type: NodePort        # uncomment if you prefer NodePort over KlipperLB
 
     ports:
       web:
@@ -50,3 +38,14 @@ spec:
         tls:
           enabled: true
 
+    deployment:
+      podAnnotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8082"
+
+    tolerations:
+      - key: "node-role.kubernetes.io/control-plane"
+        operator: "Exists"
+        effect: "NoSchedule"
+      - key: "CriticalAddonsOnly"
+        operator: "Exists"
