@@ -13,38 +13,37 @@ spec:
         name: traefik
         namespace: flux-system
   values:
-    # Make Traefik the default IngressClass so apps in any namespace work
-    ingressClass:
-      enabled: true
-      isDefaultClass: true
-      name: traefik
+  ingressClass:
+    enabled: true
+    isDefaultClass: true
+    name: traefik
 
-    providers:
-      kubernetesIngress:
-        publishedService:
-          enabled: true
-        # optional but handy on k3s
-        allowExternalNameServices: true
+  providers:
+    kubernetesIngress:
+      publishedService:
+        enabled: true
+      allowExternalNameServices: true
 
-    service:
-      ipFamilyPolicy: PreferDualStack
-      # type: NodePort        # uncomment if you prefer NodePort over KlipperLB
+  service:
+    ipFamilyPolicy: PreferDualStack
 
-    ports:
-      web:
-        redirectTo: websecure
-      websecure:
-        tls:
-          enabled: true
+  ports:
+    websecure:
+      tls:
+        enabled: true
 
-    deployment:
-      podAnnotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/port: "8082"
+  additionalArguments:
+    - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+    - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
 
-    tolerations:
-      - key: "node-role.kubernetes.io/control-plane"
-        operator: "Exists"
-        effect: "NoSchedule"
-      - key: "CriticalAddonsOnly"
-        operator: "Exists"
+  deployment:
+    podAnnotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "8082"
+
+  tolerations:
+    - key: "node-role.kubernetes.io/control-plane"
+      operator: "Exists"
+      effect: "NoSchedule"
+    - key: "CriticalAddonsOnly"
+      operator: "Exists"
