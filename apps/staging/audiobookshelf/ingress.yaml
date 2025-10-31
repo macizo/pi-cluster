@@ -12,7 +12,7 @@ spec:
           - backend:
               service:
                 name: audiobookshelf
-                port: 3005
-                  number: 
+                port:
+                  number: 3005
             path: /
             pathType: Prefix
