@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: app-config
-  namespace: default
+  namespace: audiobookshelf
 data:
   TZ: "Europe/Amsterdam"
   PORT: "3005"
