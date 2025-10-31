@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: app-config
+  name: audiobookshelf-container-env
   namespace: audiobookshelf
 data:
   TZ: "Europe/Amsterdam"
