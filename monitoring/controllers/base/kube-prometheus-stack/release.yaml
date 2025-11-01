@@ -34,7 +34,7 @@ spec:
       ingress:
         enabled: true
         ingressClassName: traefik
-      
+
           ## Hostnames.
           ## Must be provided if Ingress is enable.
           ##
